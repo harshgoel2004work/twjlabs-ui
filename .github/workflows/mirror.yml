@@ -18,7 +18,7 @@ jobs:
         env:
           TARGET_TOKEN: ${{ secrets.DESTINATION_PAT }}
           TARGET_USER: harshgoel2004work
-          TARGET_REPO: harshgoel2004work/twj-labs
+          TARGET_REPO: harshgoel2004work/twjlabs-ui
         run: |
           # We construct the URL manually. 
           # Because persist-credentials is false, Git MUST use this token.
