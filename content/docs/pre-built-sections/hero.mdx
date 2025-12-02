@@ -92,7 +92,7 @@ export const HeroOne = ({
     const {theme: contextTheme} = useTheme()
     const [localTheme] = React.useState<Theme>(theme || contextTheme || 'modern');
     
-    const themeClass = \`theme-\${localTheme}\`;
+    const themeClass = `theme-${localTheme}`;
     const styles = getHeroStyles(localTheme);
     const hasImage = !!image;
 
