@@ -11,9 +11,19 @@ The twjlabs/ui CLI is a powerful tool that simplifies the process of integrating
 
 To get started with the twjlabs/ui CLI, you first need to initialize it in your project. Open your terminal and navigate to your project directory, then run the following command:
 
-```bash
+<Tabs items={['npm','pnpm']} defaultIndex={1}>
+  <Tab value="npm">
+  ```bash
 npx @twjlabs/ui init
-```
+  ```
+  </Tab>
+  <Tab value="pnpm">
+    ```bash
+    pnpm dlx @twjlabs/ui init
+    ```
+  </Tab>
+</Tabs>
+
 
 This command will set up the basic configuration files and folder structure needed for twjlabs/ui to function properly in your project.
 
@@ -21,11 +31,21 @@ This command will set up the basic configuration files and folder structure need
 
 Once you have initialized the CLI, you can easily add components to your project. To add a specific component, use the following command:
 
-```bash
+<Tabs items={['npm','pnpm']} defaultIndex={1}>
+  <Tab value="npm">
+  ```bash
 npx @twjlabs/ui add <component-name>
-```
+  ```
+  </Tab>
+  <Tab value="pnpm">
+    ```bash
+    pnpm dlx @twjlabs/ui add <component-name>
+    ```
+  </Tab>
+</Tabs>
 
-Replace `<component-name>` with the name of the component you wish to add, such as `button`, `modal`, or `navbar`. The CLI will handle the installation and setup for you.
+
+Replace `<component-name>` with the name of the component you wish to add, such as `button`, `dropdown-menu`, or `navbar`. The CLI will handle the installation and setup for you.
 
 ## Additional Commands
 

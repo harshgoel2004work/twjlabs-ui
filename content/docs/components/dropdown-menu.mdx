@@ -58,31 +58,48 @@ Finally,
 copy and paste the following code in your `components/ui` folder
 
 ```tsx title="components/ui/dropdown-menu.tsx"
-
 "use client"
 
 import React, { useState, useRef, useEffect, useContext, createContext, type ReactNode } from 'react';
 import { cn } from '@/twj-lib/tw'; 
-import type { Theme } from '@/twj-lib/types'; 
-import { motion, AnimatePresence } from "motion/react";
+import type { Theme, TWJComponentsProps } from '@/twj-lib/types'; 
+// 1. Import specific Framer Motion types
+import { motion, AnimatePresence, type Variants, type Transition } from "motion/react";
+import { useTheme } from '@/contexts/ui-theme-context'; 
+import { fontApplier } from '@/twj-lib/font-applier'; 
+
+// 2. Type the helper return value
+const getTransitionConfig = (theme: Theme): Transition => {
+    switch (theme) {
+      case 'playful':
+        return { type: "spring", bounce: 0.5, duration: 0.4 };
+      case 'brutalist':
+        return { duration: 0.2, ease: "linear" };
+      case 'futuristic':
+        return { type: "spring", stiffness: 300, damping: 20 };
+      case 'organic':
+        return { duration: 0.4, ease: [0.22, 1, 0.36, 1] };
+      default:
+        return { duration: 0.2, ease: "easeOut" };
+    }
+};
 
 // --- CONTEXT SETUP ---
 interface DropdownContextType {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   closeMenu: () => void;
-  theme: Theme;
   align: 'left' | 'right';
-  menuRef: React.RefObject<HTMLDivElement>;
-  menuVariants: any; // Using 'any' for Framer Motion types simplification
-  getTransition: () => any;
-  themeClass: string;
+  // 3. FIX: Refs must be nullable
+  menuRef: React.RefObject<HTMLDivElement | null>;
+  // 4. FIX: Use specific Framer Motion types
+  menuVariants: Variants; 
+  transitionConfig: Transition; 
+  activeTheme: Theme; 
 }
 
-// Create the context with initial dummy values
 const DropdownMenuContext = createContext<DropdownContextType | undefined>(undefined);
 
-// Custom hook to use the context
 const useDropdownMenu = () => {
   const context = useContext(DropdownMenuContext);
   if (context === undefined) {
@@ -93,19 +110,22 @@ const useDropdownMenu = () => {
 
 // --- CORE MENU COMPONENT ---
 
-interface DropdownMenuProps {
-  children: ReactNode; // Now accepts children instead of 'items'
-  theme?: Theme;
+interface DropdownMenuProps extends TWJComponentsProps {
+  children: ReactNode;
   align?: 'left' | 'right';
 }
 
 export const DropdownMenu = ({ 
   children, 
-  theme = "modern",
+  theme: propTheme, 
   align = "left" 
 }: DropdownMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  // Ref initialization is correct here, it matches the context fix now
   const menuRef = useRef<HTMLDivElement>(null);
+  
+  const { theme: contextTheme } = useTheme();
+  const activeTheme = propTheme || contextTheme || "modern";
 
   const closeMenu = () => setIsOpen(false);
 
@@ -119,43 +139,33 @@ export const DropdownMenu = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const themeClass = `theme-${theme}`;
+  const themeClass = `theme-${activeTheme}`;
 
-  // 1. Define Animation Variants based on state (Unchanged logic)
-  const menuVariants = {
+  const menuVariants: Variants = {
     hidden: { 
       opacity: 0, y: -8, 
-      scale: theme === 'brutalist' ? 1 : 0.96,
-      filter: theme === 'futuristic' ? "blur(4px)" : "blur(0px)"
+      scale: activeTheme === 'brutalist' ? 1 : 0.96,
+      filter: activeTheme === 'futuristic' ? "blur(4px)" : "blur(0px)"
     },
     visible: { 
       opacity: 1, y: 0, scale: 1, filter: "blur(0px)"
     },
     exit: { 
       opacity: 0, y: -8, 
-      scale: theme === 'brutalist' ? 1 : 0.96,
-      filter: theme === 'futuristic' ? "blur(2px)" : "blur(0px)"
-    }
-  };
-
-  // 2. Define Physics based on Theme (Unchanged logic)
-  const getTransition = () => {
-    switch (theme) {
-      case 'playful':
-        return { type: "spring", bounce: 0.5, duration: 0.4 };
-      case 'brutalist':
-        return { duration: 0.2, ease: "linear" };
-      case 'futuristic':
-        return { type: "spring", stiffness: 300, damping: 20 };
-      case 'organic':
-        return { duration: 0.4, ease: [0.22, 1, 0.36, 1] };
-      default:
-        return { duration: 0.2, ease: "easeOut" };
+      scale: activeTheme === 'brutalist' ? 1 : 0.96,
+      filter: activeTheme === 'futuristic' ? "blur(2px)" : "blur(0px)"
     }
   };
 
   const contextValue: DropdownContextType = {
-    isOpen, setIsOpen, closeMenu, theme, align, menuRef, menuVariants, getTransition, themeClass
+    isOpen, 
+    setIsOpen, 
+    closeMenu, 
+    activeTheme, 
+    align, 
+    menuRef, 
+    menuVariants, 
+    transitionConfig: getTransitionConfig(activeTheme) 
   };
 
   return (
@@ -176,11 +186,16 @@ interface DropdownMenuTriggerProps {
   children: ReactNode;
 }
 
-// Allows any element (like your Button) to act as the trigger
 export const DropdownMenuTrigger = ({ children }: DropdownMenuTriggerProps) => {
-  const { isOpen, setIsOpen } = useDropdownMenu();
+  const { isOpen, setIsOpen, activeTheme } = useDropdownMenu();
+  
   return React.cloneElement(children as React.ReactElement, {
-    onClick: () => setIsOpen(!isOpen),
+    theme: activeTheme,
+    onClick: (e: React.MouseEvent) => {
+        // preserve existing onclick if it exists
+        (children as any).props.onClick?.(e);
+        setIsOpen(!isOpen);
+    },
   });
 };
 
@@ -189,9 +204,9 @@ interface DropdownMenuContentProps {
   className?: string;
 }
 
-// The popover content wrapper
 export const DropdownMenuContent = ({ children, className }: DropdownMenuContentProps) => {
-  const { isOpen, align, menuVariants, getTransition, theme } = useDropdownMenu();
+  const { isOpen, align, menuVariants, transitionConfig, activeTheme } = useDropdownMenu();
+  const fontClass = fontApplier(activeTheme);
 
   return (
     <AnimatePresence>
@@ -201,29 +216,23 @@ export const DropdownMenuContent = ({ children, className }: DropdownMenuContent
           animate="visible"
           exit="exit"
           variants={menuVariants}
-          transition={getTransition()}
+          transition={transitionConfig}
           className={cn(
-            // Base Layout
-            "absolute z-50 mt-2 min-w-[200px] origin-top-right overflow-hidden",
+            fontClass,
+            "absolute z-50 min-w-[200px] origin-top-right overflow-hidden translate-y-1",
             align === 'right' ? 'right-0' : 'left-0',
-            
-            // Thematic Variables
             "bg-surface text-foreground font-theme rounded-theme",
-            
-            // Default Borders/Shadows
             "border border-muted/20 shadow-lg",
-
-            // Specific Theme Overrides
-            theme === 'futuristic' && "border-primary/40 shadow-[0px_0px_20px_0px_var(--color-primary)] bg-background/90 backdrop-blur-md",
-            theme === 'brutalist' && [
+            activeTheme === 'futuristic' && "border-primary/40 shadow-[0px_0px_20px_0px_var(--color-primary)] bg-background/90 backdrop-blur-md",
+            activeTheme === 'brutalist' && [
               "border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]", "mt-1"
             ],
-            theme === 'elegant' && "border-none shadow-xl ring-1 ring-black/5",
+            activeTheme === 'elegant' && "border-none shadow-xl ring-1 ring-black/5",
             className
           )}
         >
           <div className="py-1" role="menu">
-            {children}
+            {children} 
           </div>
         </motion.div>
       )}
@@ -236,19 +245,26 @@ interface DropdownMenuItemProps {
   onClick?: () => void;
   disabled?: boolean;
   danger?: boolean;
+  link?: string;
 }
 
-// The individual item component
 export const DropdownMenuItem = ({ 
   children, 
   onClick, 
   disabled = false, 
+  link,
   danger = false 
 }: DropdownMenuItemProps) => {
-  const { theme, closeMenu } = useDropdownMenu();
+  const { activeTheme, closeMenu } = useDropdownMenu();
 
   const handleClick = () => {
     if (disabled) return;
+
+    if (link) {
+        window.location.href = link;
+        closeMenu();
+        return;
+    }
     onClick?.();
     closeMenu();
   };
@@ -258,15 +274,14 @@ export const DropdownMenuItem = ({
       onClick={handleClick}
       disabled={disabled}
       className={cn(
+        fontApplier(activeTheme),
         "group flex w-full items-center px-4 py-2.5 text-sm text-left transition-colors duration-150",
         "hover:bg-muted/30 focus:bg-muted/30 focus:outline-none",
-        
+        link && "cursor-pointer",
         danger ? "text-red-500 hover:text-red-600 hover:bg-red-50" : "text-foreground",
         disabled && "opacity-50 cursor-not-allowed",
-
-        theme === 'brutalist' && "hover:bg-primary hover:text-white hover:font-bold border-b border-transparent hover:border-black last:border-0",
-        
-        theme === 'futuristic' && "hover:bg-primary/20 hover:text-primary hover:shadow-[inset_2px_0_0_0_var(--color-primary)]",
+        activeTheme === 'brutalist' && "hover:bg-primary hover:text-white hover:font-bold border-b border-transparent hover:border-black last:border-0",
+        activeTheme === 'futuristic' && "hover:bg-primary/20 hover:text-primary hover:shadow-[inset_2px_0_0_0_var(--color-primary)]",
       )}
       role="menuitem"
     >

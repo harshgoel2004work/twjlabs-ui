@@ -1,5 +1,12 @@
 import React from 'react';
 import { Check, X, ArrowRight, Zap } from 'lucide-react';
+import Heading from './ui/basic/heading'; // Assuming these exist based on snippet
+import Text from './ui/basic/text';       // Assuming these exist based on snippet
+import { Button } from './ui/button';
+import { Theme } from '@/twj-lib/types';
+
+// Import your custom Card system
+import { Card, CardBody, CardFooter, CardHeader } from './ui/card'; // Adjust path as needed
 
 const plans = [
   {
@@ -51,89 +58,103 @@ const plans = [
   }
 ];
 
-export default function PricingSection() {
+interface PricingSectionProps {
+  theme?: Theme;
+}
+
+export default function PricingSection({ theme = 'modern' }: PricingSectionProps) {
   return (
-    <section className="py-24 bg-neutral-950 text-white relative" id="pricing">
+    <section className="py-24 bg-background dark:bg-background-dark relative" id="pricing">
       <div className="container px-4 md:px-6 mx-auto relative z-10">
         
+        {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
-            Simple pricing, <span className="text-indigo-400">powerful results.</span>
-          </h2>
-          <p className="text-neutral-400 text-lg">
+          <Heading level={1} className='leading-tight text-foreground dark:text-foreground-dark'>
+            Simple pricing, <span className="text-primary dark:text-primary-dark-mode">powerful results.</span>
+          </Heading>
+          
+          <Text className="text-muted-foreground dark:text-muted-foreground-dark text-base mt-4">
             Start for free, upgrade for tools, or hire us to build it for you.
-          </p>
+          </Text>
         </div>
 
+        {/* Pricing Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {plans.map((plan, index) => (
-            <div 
+            <Card 
               key={index}
+              theme={theme}
               className={`
-                relative flex flex-col p-8 rounded-2xl border transition-all duration-300
+                relative flex flex-col h-full
                 ${plan.featured 
-                  ? 'bg-neutral-900/80 border-indigo-500/50 shadow-2xl shadow-indigo-500/10 scale-105 z-10' 
+                  ? 'border-primary dark:border-primary-dark-mode shadow-2xl shadow-primary/10 scale-105 z-10' 
                   : plan.isAgency 
-                    ? 'bg-gradient-to-b from-neutral-900 to-neutral-950 border-neutral-800 hover:border-neutral-600'
-                    : 'bg-neutral-900/40 border-neutral-800 hover:border-neutral-700'
+                    ? 'hover:border-neutral-400 dark:hover:border-neutral-600'
+                    : 'hover:border-neutral-400 dark:hover:border-neutral-600'
                 }
+                ${plan.isAgency ? 'bg-surface dark:bg-surface-dark' : ''}
               `}
             >
-              {plan.featured && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-indigo-600 text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-lg">
-                  Most Popular
+              <CardHeader 
+                title={plan.name}
+                description={plan.description}
+                className={plan.isAgency ? "text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600" : ""}
+              >
+                {/* Price Display injected as children into CardHeader */}
+                <div className="flex items-baseline gap-1 mt-2 mb-2">
+                  <span className={`text-4xl font-bold ${plan.isAgency ? 'text-foreground dark:text-foreground-dark' : 'text-card-foreground dark:text-card-foreground-dark'}`}>
+                    {plan.price}
+                  </span>
+                  {plan.period && (
+                    <span className="text-muted-foreground dark:text-muted-foreground-dark text-sm">
+                      {plan.period}
+                    </span>
+                  )}
                 </div>
-              )}
+              </CardHeader>
 
-              {plan.isAgency && (
-                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-lg flex items-center gap-1">
-                   <Zap className="w-3 h-3 fill-current" /> Agency Mode
-                 </div>
-              )}
-
-              <div className="mb-8">
-                <h3 className={`text-xl font-bold mb-2 ${plan.isAgency ? 'text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400' : 'text-white'}`}>
-                    {plan.name}
-                </h3>
-                <div className="flex items-baseline gap-1 mb-4">
-                  <span className="text-4xl font-bold">{plan.price}</span>
-                  {plan.period && <span className="text-neutral-500 text-sm">{plan.period}</span>}
-                </div>
-                <p className="text-neutral-400 text-sm h-10">{plan.description}</p>
-              </div>
-
-              <div className="flex-1 space-y-4 mb-8">
+              <CardBody className="flex-1 space-y-4">
+                {/* Included Features */}
                 {plan.features.map((feature, i) => (
                   <div key={i} className="flex items-start gap-3 text-sm">
-                    <div className={`mt-0.5 rounded-full p-0.5 ${plan.isAgency ? 'bg-purple-500/20 text-purple-400' : 'bg-indigo-500/20 text-indigo-400'}`}>
-                        <Check className="w-3 h-3" />
+                    <div className={`mt-0.5 rounded-full p-0.5 shrink-0 
+                      ${plan.isAgency 
+                        ? 'bg-purple-500/20 text-purple-600 dark:text-purple-400' 
+                        : 'bg-primary/10 text-primary dark:text-primary-dark-mode'
+                      }`}
+                    >
+                      <Check className="w-3 h-3" />
                     </div>
-                    <span className="text-neutral-300">{feature}</span>
+                    <span className="text-muted-foreground dark:text-muted-foreground-dark">
+                      {feature}
+                    </span>
                   </div>
                 ))}
-                {plan.notIncluded.map((feature, i) => (
-                  <div key={i} className="flex items-start gap-3 text-sm text-neutral-600">
-                    <X className="w-4 h-4 mt-0.5" />
+
+                {/* Not Included Features */}
+                {plan.notIncluded && plan.notIncluded.map((feature, i) => (
+                  <div key={i} className="flex items-start gap-3 text-sm text-muted-foreground/50 dark:text-muted-foreground-dark/50">
+                    <X className="w-4 h-4 mt-0.5 shrink-0" />
                     <span>{feature}</span>
                   </div>
                 ))}
-              </div>
+              </CardBody>
 
-              <button 
-                className={`
-                  w-full py-3.5 px-4 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-2
-                  ${plan.featured 
-                    ? 'bg-indigo-600 text-white hover:bg-indigo-500 shadow-lg shadow-indigo-500/20' 
-                    : plan.isAgency
-                        ? 'bg-white text-black hover:bg-neutral-200'
-                        : 'bg-neutral-800 text-white hover:bg-neutral-700'
-                  }
-                `}
-              >
-                {plan.cta}
-                {plan.isAgency && <ArrowRight className="w-4 h-4" />}
-              </button>
-            </div>
+              <CardFooter className={theme === 'brutalist' ? "border-t-2 border-black dark:border-white pt-6" : ""}>
+                <Button 
+                  theme={theme}
+                  variant={plan.featured ? 'primary' : plan.isAgency ? 'outline' : 'secondary'}
+                  className={`
+                    w-full flex items-center justify-center gap-2
+                    ${plan.featured ? 'shadow-lg shadow-primary/20' : ''}
+                  `}
+                >
+                  {plan.cta}
+                  {plan.isAgency && <ArrowRight className="w-4 h-4 ml-1" />}
+                </Button>
+              </CardFooter>
+
+            </Card>
           ))}
         </div>
 

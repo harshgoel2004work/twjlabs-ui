@@ -11,7 +11,7 @@ This Page is solely for cli users. If you're not using the cli, please head to [
 
 if you're using twjlabs/ui cli, it should be pretty easy for you
 
-<Tabs items={['npm','pnpm']} defaultIndex={1}>
+<Tabs items={['npm','pnpm']} defaultIndex={0}>
   <Tab value="npm">
   ```bash
 npx @twjlabs/ui init
@@ -19,12 +19,84 @@ npx @twjlabs/ui init
   </Tab>
   <Tab value="pnpm">
     ```bash
-    pnpm create @twjlabs/ui
+    pnpm dlx @twjlabs/ui init 
     ```
   </Tab>
 </Tabs>
 
 this installation will set up a new project with twjlabs/ui and all necessary dependencies. It will create a `twj-lib`, `components/ui` and `contexts` folder for you to start building your components right away. It will also make changes to your `css` file accordingly.
+
+It will create the following folders and files for you:
+
+- `contexts/ui-theme-context.tsx` - Context to manage theming
+- `contexts/ai-context.tsx` - Context to manage AI interactions
+- `twj-lib/font-applier.ts` - Utility to apply fonts
+- `twj-lib/tw.tsx` - Utility for tailwind class management
+- `twj-lib/types.ts` - Type definitions
+
+
+## Changes in layout.tsx
+
+There is one more step to complete the setup. You need to wrap your application with the `ThemeProvider` and add fonts to enable theming and global styles. Open your `layout.tsx` file and make the following changes:
+
+```tsx title="app/layout.tsx" {5-13}
+import './globals.css';
+import { ThemeProvider } from '@/contexts/ui-theme-context'; // [!code highlight]
+import { AIContextProvider } from "@/contexts/ai-context"; // [!code highlight]
+
+// 1. Import the fonts
+import {  // [!code highlight]
+  Manrope, // [!code highlight]
+  Lora, // [!code highlight]
+  Orbitron, // [!code highlight]
+  Fredoka, // [!code highlight]
+  Roboto_Condensed, // [!code highlight]
+  Nunito,// [!code highlight]
+  Grenze_Gotisch// [!code highlight]
+} from "next/font/google";// [!code highlight]
+
+// 2. Setup the font instances with specific variable names
+const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", display: "swap" });// [!code highlight]
+const lora = Lora({ subsets: ["latin"], variable: "--font-lora", display: "swap" });// [!code highlight]
+const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron", display: "swap" });// [!code highlight]
+const fredoka = Fredoka({ subsets: ["latin"], variable: "--font-fredoka", display: "swap" });// [!code highlight]
+const robotoCondensed = Roboto_Condensed({ subsets: ["latin"], variable: "--font-roboto-condensed", display: "swap" });// [!code highlight]
+const nunito = Nunito({ subsets: ["latin"], variable: "--font-nunito", display: "swap" });// [!code highlight]
+const grenzeGotisch = Grenze_Gotisch({ subsets: ["latin"], variable: "--font-grenze-gotisch", display: "swap" });// [!code highlight]
+
+export default function Layout({ children }: LayoutProps<'/'>) {
+  return (
+    // Add any theme you want as initialTheme
+    {/* [!code highlight] */}
+   <ThemeProvider initialTheme='brutalist'>  
+   {/* [!code highlight] */}
+   <AIContextProvider 
+      initialPersona="technical_debugger"{/* [!code highlight] */}
+      >
+   {/* [!code highlight] */}
+      <html lang="en" className={`${manrope.variable} 
+            ${lora.variable} 
+            ${orbitron.variable} 
+            ${fredoka.variable} 
+            ${robotoCondensed.variable} 
+            ${nunito.variable}
+            ${grenzeGotisch.variable}` {/* [!code highlight] */}
+          } 
+      suppressHydrationWarning>
+        <body className="flex flex-col min-h-screen">
+            {children}
+        </body>
+      </html>
+      {/* [!code highlight] */}
+      </AIContextProvider>
+      {/* [!code highlight] */}
+   </ThemeProvider>
+  );
+}
+
+```
+
+Ok so, first you need to import the `ThemeProvider` from the `ui-theme-context` and `AIContextProvider` from the `ai-context`. Then, import the fonts you want to use from `next/font/google`. Next, create instances of each font with a unique CSS variable name. Finally, wrap your application in the `ThemeProvider` and `AIContextProvider`, setting an initial theme of your choice, and apply the font variables to the `<html>` element.
 
 That's it! You're now ready to start building with twjlabs/ui. Happy coding!
 

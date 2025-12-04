@@ -1,164 +1,724 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Lora:ital,wght@0,400..700&family=Manrope:wght@200..800&family=Nunito:ital,wght@0,200..1000&family=Orbitron:wght@400..900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
-
 @import 'tailwindcss';
 @import 'fumadocs-ui/css/neutral.css';
 @import 'fumadocs-ui/css/preset.css';
 
 
 @theme {
-  /* 1. Map Tailwind utilities to CSS variables */
-  
-  /* Usage: bg-primary, text-primary */
-  --color-primary: var(--color-primary);
-  
-  
-  /* Usage: bg-background, text-foreground (Standard Shadcn naming) */
-  --color-background: var(--color-background);
-  
-  --color-foreground: var(--color-foreground);
- 
+  /* =========================================
+     1. CORE COMPONENT TOKENS (with fallbacks)
+     ========================================= */
 
-  --color-gradient-one: var(--color-gradient-one);
-  --color-gradient-two: var(--color-gradient-two);
-  --color-gradient-three: var(--color-gradient-three);
+  /* Backgrounds */
+  --color-background: var(--color-background, #ffffff);
+  --color-background-dark: var(--color-background-dark, #0f0f0f);
 
-  /* Usage: bg-gr-three */
-  --color-gr-three: var(--color-gr-three);
-  
-  /* Usage: bg-surface, text-muted */
-  --color-surface: var(--color-surface);
-  --color-muted: var(--color-muted);
+  --color-foreground: var(--color-foreground, #111111);
+  --color-foreground-dark: var(--color-foreground-dark, #f5f5f5);
 
-  /* Usage: rounded-theme */
-  --radius-theme: var(--radius-theme); 
+  /* Surfaces */
+  --color-card: var(--color-card, #ffffff);
+  --color-card-dark: var(--color-card-dark, #1a1a1a);
 
-  /* Usage: font-theme (This will be our main dynamic font) */
-  --font-theme: var(--font-family);
-  
-  /* 2. Keep specific fonts if you need them as standalone utilities */
-  --font-modern: 'Manrope', sans-serif;
-  --font-elegant: 'Lora', serif;
-  --font-futuristic: 'Orbitron', sans-serif;
-  --font-playful: 'Fredoka', sans-serif;
-  --font-brutalist: 'Roboto Condensed', sans-serif;
-  --font-organic: 'Nunito', sans-serif;
+  --color-card-foreground: var(--color-card-foreground, #111111);
+  --color-card-foreground-dark: var(--color-card-foreground-dark, #f5f5f5);
 
+  --color-popover: var(--color-popover, #ffffff);
+  --color-popover-dark: var(--color-popover-dark, #1a1a1a);
 
-  /* DARK */
-   --color-foreground-dark: var(--color-foreground-dark);
-   --color-background-dark: var(--color-background-dark);
-   --color-primary-dark: var(--color-primary-dark);
-   --color-surface-dark: var(--color-surface-dark);
+  --color-popover-foreground: var(--color-popover-foreground, #111111);
+  --color-popover-foreground-dark: var(--color-popover-foreground-dark, #f5f5f5);
+
+  /* Brand Colors */
+  --color-primary: var(--color-primary, #6366f1);
+  --color-primary-dark-mode: var(--color-primary-dark-mode, #818cf8);
+
+  --color-primary-foreground: var(--color-primary-foreground, #ffffff);
+  --color-primary-foreground-dark: var(--color-primary-foreground-dark, #111111);
+
+  /* Darker shade of primary */
+  --color-primary-shade: var(--color-primary-shade, #4f46e5);
+  --color-primary-shade-dark: var(--color-primary-shade-dark, #4338ca);
+
+  --color-secondary: var(--color-secondary, #ec4899);
+  --color-secondary-dark: var(--color-secondary-dark, #db2777);
+
+  --color-secondary-foreground: var(--color-secondary-foreground, #ffffff);
+  --color-secondary-foreground-dark: var(--color-secondary-foreground-dark, #111111);
+
+  /* State Colors */
+  --color-muted: var(--color-muted, #f4f4f5);
+  --color-muted-dark: var(--color-muted-dark, #27272a);
+
+  --color-muted-foreground: var(--color-muted-foreground, #6b7280);
+  --color-muted-foreground-dark: var(--color-muted-foreground-dark, #a1a1aa);
+
+  --color-accent: var(--color-accent, #3b82f6);
+  --color-accent-dark: var(--color-accent-dark, #2563eb);
+
+  --color-accent-foreground: var(--color-accent-foreground, #ffffff);
+  --color-accent-foreground-dark: var(--color-accent-foreground-dark, #111111);
+
+  --color-destructive: var(--color-destructive, #ef4444);
+  --color-destructive-dark: var(--color-destructive-dark, #dc2626);
+
+  --color-destructive-foreground: var(--color-destructive-foreground, #ffffff);
+  --color-destructive-foreground-dark: var(--color-destructive-foreground-dark, #fef2f2);
+
+  /* Boundaries */
+  --color-border: var(--color-border, #e5e7eb);
+  --color-border-dark: var(--color-border-dark, #3f3f46);
+
+  --color-input: var(--color-input, #e5e7eb);
+  --color-input-dark: var(--color-input-dark, #3f3f46);
+
+  --color-ring: var(--color-ring, #6366f1);
+  --color-ring-dark: var(--color-ring-dark, #818cf8);
+
+  /* Surfaces / Custom */
+  --color-surface: var(--color-surface, #fafafa);
+  --color-surface-dark: var(--color-surface-dark, #111111);
+
+  --color-gradient-one: var(--color-gradient-one, #6366f1);
+  --color-gradient-two: var(--color-gradient-two, #ec4899);
+  --color-gradient-three: var(--color-gradient-three, #14b8a6);
+
+  /* Typography */
+  --radius-theme: var(--radius-theme, 0.5rem);
+
+  --font-theme: var(--font-family, system-ui);
+
+  --font-modern: var(--font-manrope, 'Manrope', sans-serif);
+  --font-elegant: var(--font-lora, 'Lora', serif);
+  --font-futuristic: var(--font-orbitron, 'Orbitron', sans-serif);
+  --font-playful: var(--font-fredoka, 'Fredoka', sans-serif);
+  --font-brutalist: var(--font-roboto-condensed, 'Roboto Condensed', sans-serif);
+  --font-organic: var(--font-nunito, 'Nunito', sans-serif);
+  --font-vintage: var(--font-grenze-gotisch, 'Grenze Gotisch', serif);
 }
 
-/* 3. Define the Themes */
-@layer utilities {
-  .theme-modern {
-    --color-primary: #6366f1;
-    
 
+@layer utilities {
+
+  /* =========================================
+     THEME: MODERN 
+     ========================================= */
+  .theme-modern {
+    /* Background & Surface */
+    --color-background: #ffffff;
+    --color-background-dark: #09090b;
+    
+    --color-foreground: #09090b;
+    --color-foreground-dark: #fafafa;
+
+    --color-card: #ffffff;
+    --color-card-dark: #18181b;
+
+    --color-card-foreground: #09090b;
+    --color-card-foreground-dark: #fafafa;
+
+    --color-popover: #ffffff;
+    --color-popover-dark: #18181b;
+
+    --color-popover-foreground: #09090b;
+    --color-popover-foreground-dark: #fafafa;
+
+    --color-surface: #f0f0f0;
+    --color-surface-dark: #18181b;
+
+    /* Primary */
+    --color-primary: #6366f1;
+    --color-primary-dark-mode: #818cf8; /* Light indigo for dark mode */
+    
+    --color-primary-foreground: #ffffff;
+    --color-primary-foreground-dark: rgb(255, 255, 255);
+
+    --color-primary-shade: #4f46e5;
+    --color-primary-shade-dark: #6366f1;
+
+    /* Secondary */
+    --color-secondary: #f4f4f5;
+    --color-secondary-dark: #27272a;
+
+    --color-secondary-foreground: #18181b;
+    --color-secondary-foreground-dark: #fafafa;
+
+    /* Muted */
+    --color-muted: #f4f4f5;
+    --color-muted-dark: #27272a;
+
+    --color-muted-foreground: #71717a;
+    --color-muted-foreground-dark: #a1a1aa;
+
+    /* Accent */
+    --color-accent: #f4f4f5;
+    --color-accent-dark: #27272a;
+
+    --color-accent-foreground: #18181b;
+    --color-accent-foreground-dark: #fafafa;
+
+    /* Destructive */
+    --color-destructive: #ef4444;
+    --color-destructive-dark: #7f1d1d;
+
+    --color-destructive-foreground: #ffffff;
+    --color-destructive-foreground-dark: #fafafa;
+
+    /* Borders */
+    --color-border: #e4e4e7;
+    --color-border-dark: #27272a;
+
+    --color-input: #e4e4e7;
+    --color-input-dark: #27272a;
+
+    --color-ring: #6366f1;
+    --color-ring-dark: #818cf8;
+
+    /* Misc */
     --color-gradient-one: #6366f1;
     --color-gradient-two: #8b5cf6;
     --color-gradient-three: #a78bfa;
-
     --color-gr-three: #a78bfa;
 
-    --color-background: #ffffff;
-    --color-surface: #f8f9fc;
-    --color-foreground: #111827; /* Maps to text-foreground */
-    --color-muted: #6b7280;
-    --font-family: 'Manrope', sans-serif;
+    --font-family: var(--font-manrope);
     --radius-theme: 0.5rem;
-
-    /* DARK */
-
-    --color-background-dark: #1f2937;
-    --color-foreground-dark: #d1d5db;
-    --color-surface-dark: #111827;
-    --color-primary-dark: #4f46e5;
   }
 
+  /* =========================================
+     THEME: MINIMALIST
+     ========================================= */
   .theme-minimalist {
-    --color-primary: #1f2937;
-    --color-primary-dark: #111827;
-    --color-background: #f9fafb;
+    --color-background: #fafafa;
+    --color-background-dark: #060606;
+
+    --color-foreground: #0f172a;
+    --color-foreground-dark: #ffffff;
+
+    --color-card: #ffffff;
+    --color-card-dark: #000000;
+
+    --color-card-foreground: #0f172a;
+    --color-card-foreground-dark: #ffffff;
+
+    --color-popover: #ffffff;
+    --color-popover-dark: #000000;
+
+    --color-popover-foreground: #0f172a;
+    --color-popover-foreground-dark: #ffffff;
+
     --color-surface: #ffffff;
-    --color-foreground: #374151;
-    --color-muted: #9ca3af;
-    --font-family: 'Helvetica Neue', sans-serif;
+    --color-surface-dark: #0a0a0a;
+
+    --color-primary: #18181b;
+    --color-primary-dark-mode: #ffffff;
+
+    --color-primary-foreground: #fafafa;
+    --color-primary-foreground-dark: #000000;
+
+    --color-primary-shade: #000000;
+    --color-primary-shade-dark: #e5e5e5;
+
+    --color-secondary: #f4f4f5;
+    --color-secondary-dark: #27272a;
+
+    --color-secondary-foreground: #18181b;
+    --color-secondary-foreground-dark: #ffffff;
+
+    --color-muted: #f4f4f5;
+    --color-muted-dark: #27272a;
+
+    --color-muted-foreground: #a1a1aa;
+    --color-muted-foreground-dark: #a1a1aa;
+
+    --color-accent: #f4f4f5;
+    --color-accent-dark: #27272a;
+
+    --color-accent-foreground: #18181b;
+    --color-accent-foreground-dark: #ffffff;
+
+    --color-destructive: #dc2626;
+    --color-destructive-dark: #991b1b;
+
+    --color-destructive-foreground: #fafafa;
+    --color-destructive-foreground-dark: #ffffff;
+
+    --color-border: #e4e4e7;
+    --color-border-dark: #27272a;
+
+    --color-input: #e4e4e7;
+    --color-input-dark: #27272a;
+
+    --color-ring: #18181b;
+    --color-ring-dark: #ffffff;
+
+    --color-gradient-one: #d4d4d8;
+    --color-gradient-two: #a1a1aa;
+    --color-gradient-three: #71717a;
+    --color-gr-three: #71717a;
+
+    --font-family: var(--font-inter);
     --radius-theme: 0.25rem;
   }
 
-  .theme-minimalist  {
-    --color-background: #4179f2;
-    --color-surface: #1f2937;
-    --color-foreground: #d1d5db;
-    --color-muted: #6b7280;
-  }
-
+  /* =========================================
+     THEME: ELEGANT
+     ========================================= */
   .theme-elegant {
-    --color-primary: #8c62ed;
-    --color-primary-dark: #7c3aed;
     --color-background: #faf7f2;
-    --color-surface: #ffffff;
+    --color-background-dark: rgb(12, 11, 0);
+
     --color-foreground: #2d2424;
-    --color-muted: #8b7e7e;
-    --font-family: 'Lora', serif;
+    --color-foreground-dark: #f5f5f4;
+
+    --color-card: #ffffff;
+    --color-card-dark: #292924;
+
+    --color-card-foreground: #2d2424;
+    --color-card-foreground-dark: #f5f5f4;
+
+    --color-popover: #ffffff;
+    --color-popover-dark: #292524;
+
+    --color-popover-foreground: #2d2424;
+    --color-popover-foreground-dark: #f5f5f4;
+
+    --color-surface: #ffffff;
+    --color-surface-dark: #292524;
+
+    --color-primary: #7c3aed;
+    --color-primary-dark-mode: #a78bfa;
+
+    --color-primary-foreground: #ffffff;
+    --color-primary-foreground-dark: #1c1917;
+
+    --color-primary-shade: #6d28d9;
+    --color-primary-shade-dark: #8b5cf6;
+
+    --color-secondary: #f3e8ff;
+    --color-secondary-dark: #44403c;
+
+    --color-secondary-foreground: #4c1d95;
+    --color-secondary-foreground-dark: #f5f5f4;
+
+    --color-muted: #f5f3f0;
+    --color-muted-dark: #44403c;
+
+    --color-muted-foreground: #8b7e7e;
+    --color-muted-foreground-dark: #a8a29e;
+
+    --color-accent: #f3e8ff;
+    --color-accent-dark: #44403c;
+
+    --color-accent-foreground: #4c1d95;
+    --color-accent-foreground-dark: #fafafa;
+
+    --color-destructive: #9f1239;
+    --color-destructive-dark: #7f1d1d;
+
+    --color-destructive-foreground: #fff1f2;
+    --color-destructive-foreground-dark: #fef2f2;
+
+    --color-border: #e5e0da;
+    --color-border-dark: #44403c;
+
+    --color-input: #e5e0da;
+    --color-input-dark: #44403c;
+
+    --color-ring: #7c3aed;
+    --color-ring-dark: #a78bfa;
+
+    --color-gradient-one: #7c3aed;
+    --color-gradient-two: #d946ef;
+    --color-gradient-three: #fca5a5;
+    --color-gr-three: #fca5a5;
+
+    --font-family: var(--font-lora);
     --radius-theme: 0.375rem;
   }
 
+  /* =========================================
+     THEME: FUTURISTIC
+     ========================================= */
   .theme-futuristic {
-    --color-primary: #07daed;
-    --color-primary-dark: #05a9b0;
-    --color-background: #0a0f14;
-    --color-surface: #111820;
+    --color-background: #e1f0ff;
+    --color-background-dark: #000000;
+
     --color-foreground: #e2ecf3;
-    --color-muted: #6c7a89;
-    --font-family: 'Orbitron', sans-serif;
-    --radius-theme: 0.25rem;
+    --color-foreground-dark: #e2ecf3;
+
+    --color-card: #dee9ee;
+    --color-card-dark: #111820;
+
+    --color-card-foreground: #0e1317;
+    --color-card-foreground-dark: #e2ecf3;
+
+    --color-popover: #111820;
+    --color-popover-dark: #111820;
+
+    --color-popover-foreground: #e2ecf3;
+    --color-popover-foreground-dark: #e2ecf3;
+
+    --color-surface: #cdddf0;
+    --color-surface-dark: #050505;
+
+    --color-primary: #06b6d4;
+    --color-primary-dark-mode: #06b6d4;
+
+    --color-primary-foreground: #000000;
+    --color-primary-foreground-dark: #000000;
+
+    --color-primary-shade: #0891b2;
+    --color-primary-shade-dark: #0891b2;
+
+    --color-secondary: #1e293b;
+    --color-secondary-dark: #1e293b;
+
+    --color-secondary-foreground: #e2ecf3;
+    --color-secondary-foreground-dark: #e2ecf3;
+
+    --color-muted: #1e293b;
+    --color-muted-dark: #1e293b;
+
+    --color-muted-foreground: #94a3b8;
+    --color-muted-foreground-dark: #94a3b8;
+
+    --color-accent: #e2e7f5;
+    --color-accent-dark: #0f172a;
+
+    --color-accent-foreground: #22d3ee;
+    --color-accent-foreground-dark: #22d3ee;
+
+    --color-destructive: #ef4444;
+    --color-destructive-dark: #ef4444;
+
+    --color-destructive-foreground: #ffffff;
+    --color-destructive-foreground-dark: #ffffff;
+
+    --color-border: #1e293b;
+    --color-border-dark: #1e293b;
+
+    --color-input: #1e293b;
+    --color-input-dark: #1e293b;
+
+    --color-ring: #06b6d4;
+    --color-ring-dark: #06b6d4;
+
+    --color-gradient-one: #06b6d4;
+    --color-gradient-two: #3b82f6;
+    --color-gradient-three: #6366f1;
+    --color-gr-three: #6366f1;
+
+    --font-family: var(--font-orbitron);
+    --radius-theme: 2px;
   }
 
+  /* =========================================
+     THEME: PLAYFUL
+     ========================================= */
   .theme-playful {
-    --color-primary: #ff6b6b;
-    --color-primary-dark: #e55a5a;
     --color-background: #fffbee;
-    --color-surface: #ffffff;
+    --color-background-dark: #202020;
+
     --color-foreground: #2b2b2b;
-    --color-muted: #7d7d7d;
-    --font-family: 'Fredoka', sans-serif;
+    --color-foreground-dark: #fffbee;
+
+    --color-card: #ffffff;
+    --color-card-dark: #2d2d2d;
+
+    --color-card-foreground: #2b2b2b;
+    --color-card-foreground-dark: #fffbee;
+
+    --color-popover: #ffffff;
+    --color-popover-dark: #2d2d2d;
+
+    --color-popover-foreground: #2b2b2b;
+    --color-popover-foreground-dark: #fffbee;
+
+    --color-surface: #ffffff;
+    --color-surface-dark: #2d2d2d;
+
+    --color-primary: #ff6b6b;
+    --color-primary-dark-mode: #ff8787;
+
+    --color-primary-foreground: #ffffff;
+    --color-primary-foreground-dark: #2b2b2b;
+
+    --color-primary-shade: #ee5253;
+    --color-primary-shade-dark: #ff6b6b;
+
+    --color-secondary: #ffd93d;
+    --color-secondary-dark: #ffec99;
+
+    --color-secondary-foreground: #2b2b2b;
+    --color-secondary-foreground-dark: #2b2b2b;
+
+    --color-muted: #fff0f0;
+    --color-muted-dark: #333333;
+
+    --color-muted-foreground: #7d7d7d;
+    --color-muted-foreground-dark: #999999;
+
+    --color-accent: #48dbfb;
+    --color-accent-dark: #333333;
+
+    --color-accent-foreground: #ffffff;
+    --color-accent-foreground-dark: #48dbfb;
+
+    --color-destructive: #ff6b6b;
+    --color-destructive-dark: #e03131;
+
+    --color-destructive-foreground: #ffffff;
+    --color-destructive-foreground-dark: #ffffff;
+
+    --color-border: #ffd93d;
+    --color-border-dark: #ffd93d;
+
+    --color-input: #fff0f0;
+    --color-input-dark: #333333;
+
+    --color-ring: #ff6b6b;
+    --color-ring-dark: #ff8787;
+
+    --color-gradient-one: #ff6b6b;
+    --color-gradient-two: #ffd93d;
+    --color-gradient-three: #48dbfb;
+    --color-gr-three: #48dbfb;
+
+    --font-family: var(--font-fredoka);
     --radius-theme: 1rem;
   }
 
+  /* =========================================
+     THEME: BRUTALIST
+     ========================================= */
   .theme-brutalist {
-    --color-primary: #261bc2;
-    --color-primary-dark: #333333;
     --color-background: #ffffff;
-    --color-background-dark: #000000;
-    --color-surface: #ffffff;
+    --color-background-dark: #050505;
+
     --color-foreground: #000000;
     --color-foreground-dark: #ffffff;
-    --color-muted: #3a3a3a;
-    --font-family: 'Roboto Condensed', sans-serif;
+
+    --color-card: #f3f3f3;
+    --color-card-dark: #0f0f0f;
+
+    --color-card-foreground: #000000;
+    --color-card-foreground-dark: #ffffff;
+
+    --color-popover: #ffffff;
+    --color-popover-dark: #050505;
+
+    --color-popover-foreground: #000000;
+    --color-popover-foreground-dark: #ffffff;
+
+    --color-surface: #f8f8f8;
+    --color-surface-dark: #121212;
+
+    --color-primary: #2563eb;
+    --color-primary-dark-mode: #3b82f6;
+
+    --color-primary-foreground: #ffffff;
+    --color-primary-foreground-dark: #ffffff;
+
+    --color-primary-shade: #1d4ed8;
+    --color-primary-shade-dark: #2563eb;
+
+    --color-secondary: #bef264;
+    --color-secondary-dark: #9bca44;
+
+    --color-secondary-foreground: #000000;
+    --color-secondary-foreground-dark: #000000;
+
+    --color-muted: #e5e5e5;
+    --color-muted-dark: #262626;
+
+    --color-muted-foreground: #525252;
+    --color-muted-foreground-dark: #a3a3a3;
+
+    --color-accent: #bef264;
+    --color-accent-dark: #b1d76a;
+
+    --color-accent-foreground: #000000;
+    --color-accent-foreground-dark: #000000;
+
+    --color-destructive: #000000;
+    --color-destructive-dark: #ffffff;
+
+    --color-destructive-foreground: #ffffff;
+    --color-destructive-foreground-dark: #000000;
+
+    --color-border: #000000;
+    --color-border-dark: #ffffff;
+
+    --color-input: #ffffff;
+    --color-input-dark: #000000;
+
+    --color-ring: #000000;
+    --color-ring-dark: #ffffff;
+
+    --color-gradient-one: #2563eb;
+    --color-gradient-two: #000000;
+    --color-gradient-three: #bef264;
+    --color-gr-three: #bef264;
+
+    --font-family: var(--font-roboto-condensed);
     --radius-theme: 0px;
   }
 
+  /* =========================================
+     THEME: ORGANIC
+     ========================================= */
   .theme-organic {
-    --color-primary: #6aa96f;
-    --color-primary-dark: #558a57;
     --color-background: #f4f8f5;
+    --color-background-dark: #0e130e;
+
+    --color-foreground: #1f3920;
+    --color-foreground-dark: #f1f8e9;
+
+    --color-card: #ffffff;
+    --color-card-dark: #111511;
+
+    --color-card-foreground: #2c4f2e;
+    --color-card-foreground-dark: #f1f8e9;
+
+    --color-popover: #ffffff;
+    --color-popover-dark: #223b22;
+
+    --color-popover-foreground: #2c4f2e;
+    --color-popover-foreground-dark: #f1f8e9;
+
     --color-surface: #ffffff;
-    --color-foreground: #2c4f2e;
-    --color-muted: #607061;
-    --font-family: 'Nunito', sans-serif;
-    --radius-theme: 0.75rem;
+    --color-surface-dark: #1e331e;
+
+    --color-primary: #558b2f;
+    --color-primary-dark-mode: #8bc34a;
+
+    --color-primary-foreground: #ffffff;
+    --color-primary-foreground-dark: #1a2e1a;
+
+    --color-primary-shade: #33691e;
+    --color-primary-shade-dark: #689f38;
+
+    --color-secondary: #dcedc8;
+    --color-secondary-dark: #33691e;
+
+    --color-secondary-foreground: #33691e;
+    --color-secondary-foreground-dark: #f1f8e9;
+
+    --color-muted: #e8f5e9;
+    --color-muted-dark: #2e4c2e;
+
+    --color-muted-foreground: #558b2f;
+    --color-muted-foreground-dark: #a5d6a7;
+
+    --color-accent: #f1f8e9;
+    --color-accent-dark: #2e4c2e;
+
+    --color-accent-foreground: #2c4f2e;
+    --color-accent-foreground-dark: #f1f8e9;
+
+    --color-destructive: #c62828;
+    --color-destructive-dark: #ef5350;
+
+    --color-destructive-foreground: #ffffff;
+    --color-destructive-foreground-dark: #ffffff;
+
+    --color-border: #c5e1a5;
+    --color-border-dark: #33691e;
+
+    --color-input: #ffffff;
+    --color-input-dark: #223b22;
+
+    --color-ring: #558b2f;
+    --color-ring-dark: #8bc34a;
+
+    --color-gradient-one: #558b2f;
+    --color-gradient-two: #8bc34a;
+    --color-gradient-three: #dcedc8;
+    --color-gr-three: #dcedc8;
+
+    --font-family: var(--font-nunito);
+    --radius-theme: 1.5rem;
+  }
+
+  /* =========================================
+     THEME: VINTAGE
+     ========================================= */
+  .theme-vintage {
+    --color-background: #fdf6e3;
+    --color-background-dark: #151311;
+
+    --color-foreground: #5c4033;
+    --color-foreground-dark: #e6dcd1;
+
+    --color-card: #f4ecd8;
+    --color-card-dark: #1c1815;
+
+    --color-card-foreground: #5c4033;
+    --color-card-foreground-dark: #e6dcd1;
+
+    --color-popover: #f4ecd8;
+    --color-popover-dark: #3e3229;
+
+    --color-popover-foreground: #5c4033;
+    --color-popover-foreground-dark: #e6dcd1;
+
+    --color-surface: #ffffff;
+    --color-surface-dark: #3e3229;
+
+    --color-primary: #8d6e63;
+    --color-primary-dark-mode: #d7ccc8;
+
+    --color-primary-foreground: #ffffff;
+    --color-primary-foreground-dark: #2d241e;
+
+    --color-primary-shade: #6d4c41;
+    --color-primary-shade-dark: #a1887f;
+
+    --color-secondary: #efebe9;
+    --color-secondary-dark: #4e342e;
+
+    --color-secondary-foreground: #4e342e;
+    --color-secondary-foreground-dark: #e6dcd1;
+
+    --color-muted: #d7ccc8;
+    --color-muted-dark: #5d4037;
+
+    --color-muted-foreground: #8d6e63;
+    --color-muted-foreground-dark: #a1887f;
+
+    --color-accent: #efebe9;
+    --color-accent-dark: #4e342e;
+
+    --color-accent-foreground: #3e2723;
+    --color-accent-foreground-dark: #e6dcd1;
+
+    --color-destructive: #8c2f39;
+    --color-destructive-dark: #ef5350;
+
+    --color-destructive-foreground: #ffffff;
+    --color-destructive-foreground-dark: #ffffff;
+
+    --color-border: #bcaaa4;
+    --color-border-dark: #5d4037;
+
+    --color-input: #ffffff;
+    --color-input-dark: #3e3229;
+
+    --color-ring: #8d6e63;
+    --color-ring-dark: #d7ccc8;
+
+    --color-gradient-one: #8d6e63;
+    --color-gradient-two: #a1887f;
+    --color-gradient-three: #d7ccc8;
+    --color-gr-three: #d7ccc8;
+
+    --font-family: var(--font-grenze-gotisch);
+    --radius-theme: 0.5rem;
   }
 }
 
-/* Base styles to apply defaults */
 @layer base {
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground border-border;
   }
 }
 

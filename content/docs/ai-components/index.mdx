@@ -1,0 +1,21 @@
+---
+title: AI Components
+description: AI powered UI components to supercharge your applications.
+---
+
+import { getPageTreePeers } from 'fumadocs-core/page-tree';
+import { source } from '@/lib/source';
+
+
+Welcome to the AI components page — where artificial intelligence meets user interface design. Here, you'll find a curated selection of AI-powered components that can elevate your applications to new heights. Whether you're looking to integrate smart chat helpers, semantic search interfaces, or predictive data tables, this is the place to explore and implement cutting-edge AI functionalities.
+
+## Components
+
+<Cards>
+  {getPageTreePeers(source.pageTree, '/docs/ai-components').map((peer) => (
+    <Card key={peer.url} title={peer.name} href={peer.url}>
+      {peer.description}
+    </Card>
+  ))}
+  
+</Cards>

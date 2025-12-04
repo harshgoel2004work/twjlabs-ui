@@ -1,12 +1,16 @@
 import AgencyCTA from '@/components/agency-cta';
 import FeaturesSection from '@/components/features';
-import HeroSection from '@/components/hero';
-import Link from 'next/link';
+import HeroSectionDynamic from '@/components/hero-dynamic';
+
 
 export default function HomePage() {
+
+
   return (
     <div>
-      <HeroSection />
+      {/* <HeroSection /> */}
+      <HeroSectionDynamic />
+      
       <FeaturesSection />
       <AgencyCTA />
     </div>

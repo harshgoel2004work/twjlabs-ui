@@ -1,3 +1,5 @@
+'use client'
+
 import { HomeLayout } from 'fumadocs-ui/layouts/home';
 import { baseOptions, Logo } from '@/lib/layout.shared';
 import {
@@ -7,9 +9,18 @@ import {
   NavbarMenuTrigger,
 } from 'fumadocs-ui/layouts/home/navbar';
 import { ComponentIcon, SectionIcon, Users2 } from 'lucide-react';
+import { useTheme } from '@/contexts/ui-theme-context';
+import { useEffect, useState } from 'react';
+import { Theme } from '@/twj-lib/types';
+import Link from 'next/link';
 
 export default function Layout({ children }: LayoutProps<'/'>) {
-  return <HomeLayout {...baseOptions()} 
+  const {theme} = useTheme()
+  const [themeClass, setThemeClass] = useState<Theme>('modern')
+  useEffect(() => {
+    setThemeClass(theme)
+  },[theme])
+  return <HomeLayout  {...baseOptions()} 
   nav={
     {
       children: [
@@ -25,7 +36,9 @@ export default function Layout({ children }: LayoutProps<'/'>) {
           on: 'nav',
           children: (
             <NavbarMenu>
-              <NavbarMenuTrigger>Documentation</NavbarMenuTrigger>
+              <NavbarMenuTrigger>
+                <Link href="/docs">Documentation</Link>
+              </NavbarMenuTrigger>
               <NavbarMenuContent>
                 <NavbarMenuLink href="/docs/getting-started" className=''>
                   <div className='flex flex-col '>
@@ -61,6 +74,13 @@ export default function Layout({ children }: LayoutProps<'/'>) {
           ),
         },
         {
+            type:'main',
+          text: 'Documentation',
+          url: '/docs/getting-started',
+          active: 'url',
+          on: 'menu'
+        },
+        {
            type:'main',
           text: 'Pricing',
           url: '/pricing',
@@ -80,5 +100,6 @@ export default function Layout({ children }: LayoutProps<'/'>) {
           secondary: true
         },
           ]}
-          >{children}</HomeLayout>;
+          >
+            <div className={`theme-${themeClass}`}>{children}</div></HomeLayout>;
 }

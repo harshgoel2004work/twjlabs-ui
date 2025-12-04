@@ -1,41 +1,28 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
-import type { Theme } from "@/twj-lib/types";
+import React, { createContext, useContext, useState } from "react";
+import type { Theme } from "@/twj-lib/types"; 
 
-interface ThemeContextValue {
+interface ThemeContextType {
   theme: Theme;
   setTheme: (theme: Theme) => void;
 }
 
-const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({
-  initialTheme = "modern",
   children,
+  initialTheme = "modern", 
 }: {
-  initialTheme?: Theme;
   children: React.ReactNode;
+  initialTheme?: Theme;
 }) {
-  // --------------------------------------------------
-  // ✔ Load from localStorage lazily (React 19 recommended)
-  // --------------------------------------------------
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("ui-theme") as Theme | null;
-      return saved || initialTheme;
-    }
-    return initialTheme;
-  });
+  // ✅ 1. Initialize State with the prop. 
+  // This happens once on mount. You don't need useEffect to set this.
+  const [theme, setTheme] = useState<Theme>(initialTheme);
 
-  // --------------------------------------------------
-  // ✔ Sync theme → HTML + localStorage
-  // --------------------------------------------------
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("ui-theme", theme);
-  }, [theme]);
-
+  // ❌ REMOVED: The useEffect was causing the double-render/sync error.
+  
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
       {children}
@@ -44,10 +31,9 @@ export function ThemeProvider({
 }
 
 export function useTheme() {
-  const ctx = useContext(ThemeContext);
-  if (!ctx) {
-    throw new Error("useTheme must be used inside <ThemeProvider>");
+  const context = useContext(ThemeContext);
+  if (context === undefined) {
+    throw new Error("useTheme must be used within a ThemeProvider");
   }
-  return ctx;
+  return context;
 }
-

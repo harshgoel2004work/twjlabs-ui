@@ -1,0 +1,51 @@
+---
+title: Supported Components for AI
+description: A list of components available in TWJ Labs UI that leverage AI capabilities.
+---
+
+import { TypeTable } from 'fumadocs-ui/components/type-table';
+
+# Supported AI Components
+
+Master list of AI-powered components available in TWJ Labs UI: (This list includes components that are currently available and those planned for future releases.)
+
+## 1. Form Elements (The "Hands" of the AI)
+
+These allow the AI to fill out data for the user.
+
+| Component         | AI Actions                                     | Example User Command                  | Docs   |
+| ----------------- | ---------------------------------------------- | ------------------------------------- | ------ |
+| Input / Textarea  | `setValue(text)`, `clear()`                    | "Fill in my email address."           | [Input](/docs/components/input) [Textarea](/docs/components/textarea) |
+| Button  | `onClick()`                    | "Click the submit button."           | [Button](/docs/components/button) |
+| Switch | `turnOn()`, `turnOff()`, `toggle()`               | "Enable notifications."               | [Switch](/docs/components/switch) |
+| Select | `select(value)`, `open()`, `close()`           | "Change the currency to USD."         | *In Development* |
+| Checkbox          | `check()`, `uncheck()`, `toggle()`             | "Agree to the terms."                 | *In Development* |
+| Radio Group       | `select(value)`                                | "Choose the 'Pro' plan."              | *In Development* |
+| Slider            | `setValue(number)`, `increase()`, `decrease()` | "Turn the volume up to 80%."          | *In Development* |
+| Date Picker       | `setDate(dateString)`, `nextMonth()`           | "Schedule a meeting for next Friday." | *In Development* |
+| Color Picker      | `setColor(hex)`                                | "Make the background blue."           | *In Development* |
+
+
+## 2. Navigation & Layout (The "Legs" of the AI)
+
+These allow the AI to move the user around the interface.
+
+| Component   | AI Actions                               | Example User Command               | Docs   |
+| ----------- | ---------------------------------------- | ---------------------------------- | ------ |
+| Tabs        | `switchTab(tabId)`                       | "Go to the Settings tab."          | *In Development* |
+| Accordion   | `expand(id)`, `collapse(id)`             | "Open the FAQ section."            | *In Development* |
+| Pagination  | `nextPage()`, `prevPage()`, `goTo(page)` | "Show me the next set of results." | *In Development* |
+| Scroll Area | `scrollToTop()`, `scrollToBottom()`      | "Scroll back up."                  | *In Development* |
+| Carousel    | `next()`, `prev()`, `goToSlide(index)`   | "Show the next image."             | *In Development* |
+
+
+## 3. Feedback & Overlays (The "Focus" of the AI)
+
+These allow the AI to manage distractions and windows.
+
+| Component       | AI Actions                      | Example User Command        | Docs   |
+| --------------- | ------------------------------- | --------------------------- | ------ |
+| Modal / Dialog  | `open()`, `close()`             | "Open my profile settings." | *In Development* |
+| Sheet / Sidebar | `open()`, `close()`, `toggle()` | "Close the side menu."      | *In Development* |
+| Toast / Alert   | `dismiss()`                     | "Clear all notifications."  | *In Development* |
+| Tooltip         | `show()`, `hide()`              | "What does this icon do?"   | *In Development* |

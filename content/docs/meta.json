@@ -1,0 +1,14 @@
+{
+  "items": [
+    { "slug": "ai-components", "index": 1 },
+    { "slug": "components", "index": 2 },
+    { "slug": "pre-built-sections", "index": 3 },
+
+    { "slug": "cli", "index": 4 },
+    { "slug": "getting-started", "index": 5 },
+    { "slug": "manual-setup", "index": 6 },
+    { "slug": "index", "index": 7 },
+
+    { "slug": "other", "index": 999 }
+  ]
+}

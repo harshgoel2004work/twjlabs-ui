@@ -5,6 +5,9 @@ import {
   metaSchema,
 } from 'fumadocs-mdx/config';
 import rehypePrism from 'rehype-prism-plus';
+import { transformerMetaHighlight } from '@shikijs/transformers';
+import { codeImport } from 'remark-code-import';
+import path from 'path';
 
 // You can customise Zod schemas for frontmatter and `meta.json` here
 // see https://fumadocs.dev/docs/mdx/collections
@@ -25,7 +28,9 @@ export default defineConfig({
   mdxOptions: {
     // MDX options
     rehypePlugins:[
-      rehypePrism
-    ]
+      rehypePrism,
+      [codeImport, { rootDir: process.cwd() }],
+    ],
+    
   },
 });

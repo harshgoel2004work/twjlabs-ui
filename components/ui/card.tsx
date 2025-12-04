@@ -1,63 +1,77 @@
+"use client"
+
 import React from "react";
-import type { Theme } from "@/twj-lib/types";
+import type { Theme, TWJComponentsProps } from "@/twj-lib/types";
 import { cn } from "@/twj-lib/tw";
 import { fontApplier } from "@/twj-lib/font-applier";
+import { useTheme, ThemeProvider } from "@/contexts/ui-theme-context";
 
 // ----------------------------------------------------
-// 🔵 Card Component (Main Wrapper)
+// 🔵 Card Component
 // ----------------------------------------------------
-interface CardProps {
-  theme: Theme;
+interface CardProps extends TWJComponentsProps {
   children?: React.ReactNode;
+  className?: string; 
 }
 
-export const Card = ({ theme, children }: CardProps) => {
-    // 1. Determine the root theme class
-      const themeClass = `theme-${theme}`;
-      const fontClass = fontApplier(theme);
-  // Allowed component types
-  const allowed = ["CardHeader", "CardBody", "CardFooter"];
+export const Card = ({ theme, children, className }: CardProps) => {
+  const { theme: contextTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
 
-  // Validate and clone children with theme
-  const validatedChildren = React.Children.map(children, (child) => {
-    if (!React.isValidElement(child)) return child;
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
-    // ensure the child is typed with an optional theme prop so we can inject it
-    const element = child as React.ReactElement<{ theme?: Theme }>;
+  const activeTheme = theme || contextTheme || "modern";
+  const appliedTheme = mounted ? activeTheme : "modern";
 
-    const childName = (element.type as any).displayName;
+  const fontClass = fontApplier(appliedTheme);
+  const themeClass = `theme-${appliedTheme}`;
 
-    if (!allowed.includes(childName)) {
-      console.warn(
-        `❌ Invalid child <${childName}> passed to <Card>. Allowed children: CardHeader, CardBody, CardFooter.`
-      );
-      return null;
+  const childrenWithTheme = React.Children.map(children, (child) => {
+    if (React.isValidElement(child)) {
+      return React.cloneElement(child as React.ReactElement<any>, { 
+        theme: appliedTheme 
+      });
     }
-
-    // inject theme into children
-    return React.cloneElement(element, { theme });
+    return child;
   });
 
   return (
-    <div data-theme={theme} className={cn(
-    // Base Styles using the variables
-        // font-theme maps to var(--font-family) set by the theme class
-        // rouded-theme maps to var(--radius-theme) set by the theme class
-        'rounded-theme font-semibold transition-all duration-200  w-[500px]',
-        'focus:outline-none ',
-    themeClass,
-    fontClass,
-    '',
-    'border border-foreground/10 bg-surface dark:bg-surface-dark p-4',
-     theme === 'brutalist' && [
-            'text-foreground dark:text-foreground-dark dark:bg-background-dark uppercase tracking-wider border-2 border-foreground dark:border-foreground-dark',
-           
-            'shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-foreground-dark',
+    <ThemeProvider initialTheme={appliedTheme} key={appliedTheme}>
+      <div 
+        data-theme={appliedTheme} 
+        className={cn(
+          themeClass,
+          fontClass,
+          
+          // --- BASE STYLES ---
+          'rounded-theme font-semibold transition-all duration-200',
+          'p-4 w-full focus:outline-none',
+
+          // --- EXPLICIT DARK MODE SWITCHING ---
+          // Light Mode Class            // Dark Mode Class
+          'bg-card                       dark:bg-card-dark',
+          'border border-border          dark:border-border-dark',
+          'text-card-foreground          dark:text-card-foreground-dark',
+
+          // --- BRUTALIST OVERRIDES ---
+          appliedTheme === 'brutalist' && [
+            'uppercase tracking-wider',
             
-        ],
-    )}>
-      {validatedChildren}
-    </div>
+            // Explicitly swap border color for brutalist (Black -> White)
+            'border-2 border-black dark:border-white', 
+            
+            // Explicitly swap shadow color (Black Shadow -> White Shadow)
+            'shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]',
+          ],
+          
+          className 
+        )}
+      >
+        {childrenWithTheme}
+      </div>
+    </ThemeProvider>
   );
 };
 
@@ -67,27 +81,62 @@ export const Card = ({ theme, children }: CardProps) => {
 interface CardHeaderProps {
   title?: string;
   icon?: React.ReactNode;
+  theme?: Theme; 
   description?: string;
-  theme?: Theme;
   className?: string;
+  children?: React.ReactNode; 
 }
 
-export const CardHeader = ({ title, icon, description, theme, className }: CardHeaderProps) => {
+export const CardHeader = ({ title, icon, description, theme, className, children }: CardHeaderProps) => {
   return (
     <div className={cn(
         'mb-4 flex flex-col items-start gap-2',
-        theme === 'brutalist' && 'border-b-2 border-black pb-2',
+        // Brutalist: Border Black -> White
+        theme === 'brutalist' && 'border-b-2 border-black dark:border-white pb-4 mb-4',
         className
     )}>
-      {icon && <div className={cn(
-        'mb-2',
-        theme === 'brutalist' && 'border-2 border-black p-1 bg-primary text-background shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]',
-      )}>{icon}</div>}
-      {title && <h2 className={cn(
-        'text-2xl font-bold ',
-        
-      )}>{title}</h2>}
-      {description && <p className="text-foreground/80 dark:text-foreground-dark/80 mb-2">{description}</p>}
+      {/* Icon Wrapper */}
+      {icon && (
+        <div className={cn(
+          'mb-2 text-2xl',
+          theme === 'brutalist' && [
+             'p-2 border-2',
+             // Border: Black -> White
+             'border-black dark:border-white', 
+             
+             // Background: Primary -> Primary Dark Mode
+             'bg-primary dark:bg-primary-dark-mode', 
+             
+             // Text: Foreground -> Foreground Dark
+             'text-primary-foreground dark:text-primary-foreground-dark',
+             
+             // Shadow: Black -> White
+             'shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)]'
+          ]
+        )}>
+          {icon}
+        </div>
+      )}
+      
+      {/* Title */}
+      {title && (
+        <h2 className="text-2xl font-bold leading-none tracking-tight">
+          {title}
+        </h2>
+      )}
+      
+      {/* Description */}
+      {description && (
+        <p className={cn(
+          "text-sm",
+          // Muted -> Muted Dark
+          "text-muted-foreground dark:text-muted-foreground-dark"
+        )}>
+          {description}
+        </p>
+      )}
+
+      {children}
     </div>
   );
 };
@@ -98,14 +147,21 @@ CardHeader.displayName = "CardHeader";
 // ----------------------------------------------------
 interface CardBodyProps {
   children?: React.ReactNode;
-  theme?: Theme;
   className?: string;
+  theme?: Theme; 
 }
 
-export const CardBody = ({ children, className }: CardBodyProps) => {
-  return <div className={cn(
-    className,
-  )}>{children}</div>;
+export const CardBody = ({ children, className, theme }: CardBodyProps) => {
+  return (
+    <div className={cn(
+      "text-sm",
+      // Foreground -> Foreground Dark
+      "text-card-foreground dark:text-card-foreground-dark",
+      className
+    )}>
+      {children}
+    </div>
+  );
 };
 CardBody.displayName = "CardBody";
 
@@ -115,12 +171,19 @@ CardBody.displayName = "CardBody";
 interface CardFooterProps {
   children?: React.ReactNode;
   theme?: Theme;
-    className?: string;
+  className?: string;
 }
 
-export const CardFooter = ({ children, className }: CardFooterProps) => {
-  return <div className={cn(
-    className,
-  )}>{children}</div>;
+export const CardFooter = ({ children, className, theme }: CardFooterProps) => {
+  return (
+    <div className={cn(
+      "flex items-center pt-4 mt-4",
+      // Brutalist Divider: Black -> White
+      theme === 'brutalist' && "pt-4  border-black dark:border-white", 
+      className
+    )}>
+      {children}
+    </div>
+  );
 };
 CardFooter.displayName = "CardFooter";

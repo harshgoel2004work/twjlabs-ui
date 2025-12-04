@@ -9,12 +9,10 @@ export function CustomCodeBlock({ ref: _ref, ...props }: React.ComponentProps<'p
   const [isOverflowing, setIsOverflowing] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Height threshold in pixels before "Show More" appears
   const MAX_HEIGHT = 300; 
 
   useEffect(() => {
     if (containerRef.current) {
-      // Check if the scrollHeight is significantly larger than our max height
       if (containerRef.current.scrollHeight > MAX_HEIGHT) {
         setIsOverflowing(true);
       }
@@ -25,22 +23,29 @@ export function CustomCodeBlock({ ref: _ref, ...props }: React.ComponentProps<'p
     <CodeBlock {...props} className="my-4">
       <div 
         ref={containerRef}
-        className={`relative transition-[max-height] duration-300 ease-in-out overflow-hidden ${
-           !isExpanded && isOverflowing ? 'max-h-[300px]' : 'max-h-none'
+        // KEY CHANGE 1: 
+        // We use 'overflow-x-auto' on the CONTAINER to handle horizontal scrolling.
+        // We use 'overflow-y-hidden' only when collapsed to clip the height.
+        className={`relative transition-[max-height] duration-300 ease-in-out overflow-x-auto ${
+           !isExpanded && isOverflowing 
+             ? 'max-h-[300px] overflow-y-hidden' 
+             : 'max-h-none overflow-y-visible'
         }`}
       >
-        {/* We use the original Pre component from Fumadocs to keep 
-           syntax highlighting and horizontal scrolling 
+        {/* KEY CHANGE 2: 
+            We force the Pre tag to be visible (!overflow-visible) so it doesn't 
+            create its own internal scrollbar. It forces the parent div to scroll instead. 
+            'min-w-full' ensures the background color extends fully.
         */}
-        <Pre>{props.children}</Pre>
+        <Pre className="!overflow-visible min-w-full">
+            {props.children}
+        </Pre>
 
-        {/* Gradient Fade Overlay (Only visible when collapsed and overflowing) */}
         {!isExpanded && isOverflowing && (
           <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-neutral-950 to-transparent pointer-events-none" />
         )}
       </div>
 
-      {/* Toggle Button */}
       {isOverflowing && (
         <div className="w-full flex justify-center border-t border-white/10 bg-neutral-900/30 p-2 rounded-b-lg">
             <button 
