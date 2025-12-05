@@ -1,3 +1,59 @@
+---
+title: Tabs
+description: Switch between different views, content, or sub-pages
+---
+
+import { TypeTable } from 'fumadocs-ui/components/type-table';
+import ComponentPlayground from '@/components/code-playground-code'
+
+import {tabsCode} from '@/templates/components/tabs';
+import { Button } from '@/components/ui/button';
+
+
+<ComponentPlayground 
+  title="Tabs Example"
+  description="Organize content into separate views where only one view is visible at a time."
+  code={tabsCode}
+/>
+
+The **Tabs** component is a layered component used to organize content into distinct sections. It is useful for:
+- settings pages
+- profile views
+- switching between data tables
+- toggleable forms
+
+It supports **themes**, **keyboard navigation**, and **automatic theme propagation** to nested triggers and content.
+
+`TL;DR:` Tabs allows users to navigate between multiple panels of content within the same context. It includes a list of triggers (buttons) and corresponding content panels.
+
+## Installation
+
+### Using CLI
+
+if you're using twjlabs/ui cli, it should be pretty easy for you
+
+<Tabs items={['npm','pnpm']} defaultIndex={1}>
+  <Tab value="npm">
+  ```bash
+  npx @twjlabs/ui add tabs
+  ```
+  </Tab>
+  <Tab value="pnpm"> 
+  ```bash 
+  pnpm dlx @twjlabs/ui add tabs 
+  ```
+  </Tab> 
+</Tabs>
+
+### Manual Installation
+
+if you're not using the cli, you would need to install it manually.
+
+Now make sure you have `twj-lib` folder with necessary utility functions and types in your project. If not, you can refer [here](/docs/manual-setup#create-twj-lib-files) to set it up.
+
+Finally, copy and paste the following code in your components/ui/tabs.tsx folder
+
+```tsx title="components/ui/tabs.tsx" 
 "use client"
 
 import { useAIControl } from "@/contexts/ai-context"
@@ -224,3 +280,28 @@ export const TabView = ({tab, children}: {tab: string; children: React.ReactNode
         </ThemeProvider>
     )
 }
+```
+
+## Usage
+
+```tsx 
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+
+<Tabs defaultValue="account" className="w-[400px]">
+  <TabsList>
+    <TabsTrigger value="account">Account</TabsTrigger>
+    <TabsTrigger value="password">Password</TabsTrigger>
+  </TabsList>
+  <TabsContent value="account">Make changes to your account here.</TabsContent>
+  <TabsContent value="password">Change your password here.</TabsContent>
+</Tabs>
+```
+
+## Tabs Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `defaultValue` | `string` | - | The value of the tab to select by default |
+| `value` | `string` | - | The controlled value of the tab to select |
+| `onValueChange` | `(value: string) => void` | - | Event handler called when value changes |
+| `theme` | `Theme` | modern | Theme override |

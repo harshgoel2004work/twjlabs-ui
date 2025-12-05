@@ -1,3 +1,54 @@
+---
+title: Switch
+description: The Switch component is a toggleable input that allows users to switch between two states, such as on and off.
+---
+
+import { TypeTable } from 'fumadocs-ui/components/type-table';
+import ComponentPlayground from '@/components/code-playground-code'
+import { Switch } from '@/components/ui/switch';
+import {switchCode} from '@/templates/components/switch'
+import { Button } from '@/components/ui/button';
+
+<ComponentPlayground 
+  title="Switch Example"
+  description="A simple example of the Switch component in action."
+  code={switchCode}
+/>
+
+The **Switch** component is a toggleable input that allows users to switch between two states, such as on and off. It is commonly used in forms and settings to represent binary choices.
+
+---
+
+`TL;DR:` 
+
+## Installation
+
+### Using CLI
+
+if you're using twjlabs/ui cli, it should be pretty easy for you
+
+<Tabs items={['npm','pnpm']} defaultIndex={1}>
+  <Tab value="npm">
+  ```bash
+  npx @twjlabs/ui add switch
+  ```
+  </Tab>
+  <Tab value="pnpm"> 
+  ```bash 
+  pnpm dlx @twjlabs/ui add switch
+  ```
+  </Tab> 
+</Tabs>
+
+### Manual Installation
+
+if you're not using the cli, you would need to install it manually.
+
+Now make sure you have `twj-lib` folder with necessary utility functions and types in your project. If not, you can refer [here](/docs/manual-setup#create-twj-lib-files) to set it up.
+
+Finally, copy and paste the following code in your components/ui/tabs.tsx folder
+
+```tsx title="components/ui/switch.tsx"
 "use client"
 
 import React, { useState } from 'react';
@@ -187,3 +238,26 @@ export const Switch = ({
     </label>
   );
 };
+```
+
+## Usage 
+
+Here is a basic example of how to use the Switch component in your React application:
+
+```tsx title="Example Usage"
+<Switch theme="modern"/>
+```
+
+## Props
+
+## Props
+
+| Prop              | Type                              | Description |
+|-------------------|-----------------------------------|-------------|
+| `checked`         | `boolean`                          | Controls whether the switch is on or off. |
+| `onCheckedChange` | `(checked: boolean) => void`       | Callback fired when the switch state changes. |
+| `label`           | `string`                           | Optional text label shown next to the switch. |
+| `theme`           | `Theme`                            | Applies the selected theme style. |
+| `className`       | `string`                           | Additional CSS classes for custom styling. |
+| `aiID`            | `string`                           | Unique AI identifier (e.g. `"airplane-mode-switch"`). |
+| `aiDescription`   | `string`                           | AI-readable description of the component’s purpose (e.g. `"Toggles airplane mode on or off"`). |

@@ -8,9 +8,11 @@ import {
 } from 'lucide-react';
 import { themes } from 'prism-react-renderer';
 import { Theme, themes as twjThemes } from '@/twj-lib/types';
+import { Switch } from './ui/switch';
 
 // --- IMPORT YOUR COMPONENTS HERE ---
 import { Card, CardHeader, CardBody, CardFooter } from '@/components/ui/card';
+import { Tabs, Tab,TabView,TabsList,TabsView } from './ui/tabs';
 import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
 
@@ -89,7 +91,13 @@ export default function ComponentPlayground({
     CardHeader,
     CardBody,
     CardFooter,
+    Tabs,
+    Tab,
+    TabView,
+    TabsList,
+    TabsView,
     Button,
+    Switch,
     Input,
     Settings,
     ...scope 
