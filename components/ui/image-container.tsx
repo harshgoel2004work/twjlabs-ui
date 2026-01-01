@@ -58,6 +58,8 @@ const ImageContainer = ({
     fontClass,
     "overflow-hidden rounded-theme border border-border dark:border-border-dark bg-surface",
     appliedTheme === "brutalist" && "border-2 border-border dark:border-border-dark/20 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]/20 font-brutalist",
+    appliedTheme === "futuristic" && "border-primary/40 shadow-[0px_0px_20px_0px_var(--color-primary)]/20 bg-background/90 backdrop-blur-md",
+    appliedTheme === "elegant" && "border-none shadow-xl ring-1 ring-black/5",  
     className
   )}
   
