@@ -1,0 +1,62 @@
+---
+title: Image Container Component
+---
+
+## Overview
+
+The `ImageContainer` component is a versatile UI element designed to display images with various styling options. It supports different themes, including brutalist, futuristic, and elegant, allowing for flexible integration into your projects.
+
+## Usage
+
+To use the `ImageContainer` component, simply import it into your project and apply it as needed. The component accepts various props to customize its appearance.
+
+## Themes
+
+The `ImageContainer` component supports the following themes:
+
+- **Brutalist**: Adds a border and shadow to the image container.
+- **Futuristic**: Adds a primary-colored border and shadow to the image container.
+- **Elegant**: Adds a ring and shadow to the image container.
+
+## Code Changes
+
+Recently, updates were made to the `ImageContainer` component to include additional theme styles:
+
+```tsx
+const ImageContainer = ({ ... }) => {
+  // ...
+  className={cn(
+    fontClass,
+    "overflow-hidden rounded-theme border border-border dark:border-border-dark bg-surface",
+    appliedTheme === "brutalist" && "border-2 border-border dark:border-border-dark/20 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]/20 font-brutalist",
+    appliedTheme === "futuristic" && "border-primary/40 shadow-[0px_0px_20px_0px_var(--color-primary)]/20 bg-background/90 backdrop-blur-md",
+    appliedTheme === "elegant" && "border-none shadow-xl ring-1 ring-black/5",
+    className
+  )}
+  // ...
+}
+```
+
+## Example Usage
+
+Here's an example of how to use the `ImageContainer` component with different themes:
+
+```tsx
+import ImageContainer from '@/components/ui/image-container';
+
+const App = () => {
+  return (
+    <div>
+      <ImageContainer theme="brutalist">
+        <img src="image1.jpg" alt="Image 1" />
+      </ImageContainer>
+      <ImageContainer theme="futuristic">
+        <img src="image2.jpg" alt="Image 2" />
+      </ImageContainer>
+      <ImageContainer theme="elegant">
+        <img src="image3.jpg" alt="Image 3" />
+      </ImageContainer>
+    </div>
+  );
+};
+```
