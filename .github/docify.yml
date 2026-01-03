@@ -1,0 +1,38 @@
+# Docify Configuration
+docs:
+  
+  # Ignore specific files
+  ignore:
+    - "src/internal/**"
+    - "scripts/**"
+
+  # Optional: Link to external docs repo
+  # external:
+  #   owner: ${owner}
+  #   repo: my-docs
+  #   path: content/docs
+
+
+  # Enable automatic Mermaid.js flowcharts for complex logic.
+  # Default: true
+  diagrams: true
+
+
+  # If auto-detection gets it wrong, force it here.
+  # Options: nextra, fumadocs, docusaurus, mintlify, etc.
+  framework: "fumadocs"
+
+    # Only update docs within these folders.
+  update_scope:
+    - components
+    - api
+
+    # Safety Limits
+  limits:
+    max_files: 15
+    max_lines: 1000
+
+    # Changelog Settings
+  changelog:
+    enabled: true
+    path: CHANGELOG.md
