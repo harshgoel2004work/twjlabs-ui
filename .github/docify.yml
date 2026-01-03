@@ -1,0 +1,17 @@
+
+# Docify Configuration
+docs:
+  # Enable Mermaid.js diagrams for complex logic
+  diagrams: true
+  
+  # Ignore specific files
+  ignore:
+    - "src/internal/**"
+    - "scripts/**"
+
+  # Optional: Link to external docs repo
+  # external:
+  #   owner: harshgoel2004work
+  #   repo: my-docs
+  #   path: content/docs
+                
