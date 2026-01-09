@@ -1,0 +1,219 @@
+
+# ================================
+# UpToDocs Configuration File
+# ================================
+# This file controls how UpToDocs detects code changes
+# and generates documentation updates.
+#
+# All changes proposed by UpToDocs are made via
+# pull requests — nothing is auto-merged.
+#
+# Location: .github/uptodocs.yml
+# ================================
+
+docs:
+  # --------------------------------
+  # 1. Documentation Location
+  # --------------------------------
+  # Path inside the repository where documentation lives.
+  # Common values: "docs", "content/docs", "website/docs"
+
+  path: "docs"
+
+  # --------------------------------
+  # 2. Ignore Rules (optional)
+  # --------------------------------
+  # Files or folders that should never be documented.
+  # Useful for internal utilities or scripts.
+
+  ignore:
+    - "src/internal/**"
+    - "scripts/**"
+    - "**/*.test.ts"
+    - "**/*.spec.ts"
+
+  # --------------------------------
+  # 3. External Documentation Repo (Optional)
+  # --------------------------------
+  # Use this if your docs live in a separate repository.
+  #
+  # external:
+  #   owner: "harshgoel2004work"
+  #   repo: "my-docs-repo"
+  #   path: "content/docs"
+
+  # --------------------------------
+  # 4. Organization-wide Aggregation (Enterprise)
+  # --------------------------------
+  # Aggregate documentation from multiple repositories
+  # into a single documentation source.
+  #
+  # aggregate:
+  #   - owner: "my-org"
+  #     repo: "auth-service"
+  #     path: "docs/api"
+  #   - owner: "my-org"
+  #     repo: "billing-service"
+  #     path: "docs/api"
+
+  # --------------------------------
+  # 5. Documentation Framework
+  # --------------------------------
+  # Auto-detected by default.
+  # Override only if detection is incorrect.
+  #
+  # Supported:
+  # - nextra
+  # - fumadocs
+  # - docusaurus
+  # - mintlify
+  # - vitepress
+  # - starlight
+  # - gitbook
+  # - plain-markdown
+
+  framework: "fumadocs"
+
+  # --------------------------------
+  # 6. Diagram Generation
+  # --------------------------------
+  # Automatically generate Mermaid.js diagrams
+  # for complex logic when applicable.
+  #
+  # Recommended: true (Beta feature)
+  diagrams: true
+
+  # --------------------------------
+  # 7. Update Scope (Optional)
+  # --------------------------------
+  # Only update documentation for changes
+  # occurring in these folders.
+  #
+  # update_scope:
+  #   - "components"
+  #   - "api"
+
+  # --------------------------------
+  # 8. Safety Limits (Pro / Enterprise)
+  # --------------------------------
+  # Prevent overly large or risky pull requests.
+  #
+  limits:
+    # Maximum number of documentation files
+    # allowed per PR.
+    max_files: 3
+
+    # Maximum total lines changed across all files.
+    max_lines: 1000
+
+  # --------------------------------
+  # 9. Changelog Integration (Pro / Enterprise)
+  # --------------------------------
+  # Automatically update changelog entries
+  # when documentation-relevant changes occur.
+  #
+  changelog:
+    enabled: true
+    path: "CHANGELOG.md"
+
+  # --------------------------------
+  # 10. Preview / Dry Run Mode (Pro / Enterprise)
+  # --------------------------------
+  # If enabled, UpToDocs will NOT open pull requests.
+  # Instead, it will post preview comments only.
+  #
+  # Useful for testing configuration changes safely.
+  #
+  dry_run: false
+
+  # --------------------------------
+  # 11. Code Monitoring Scope (Pro / Enterprise)
+  # --------------------------------
+  # Only monitor code changes in these paths.
+  #
+  scope:
+    path:
+      - "src/**"
+
+  # --------------------------------
+  # 12. Monorepo Support (Pro / Enterprise)
+  # --------------------------------
+  # Map individual packages to their
+  # respective documentation directories.
+  #
+  packages:
+    "packages/ui":
+      docs: "docs/design-system"
+
+    "packages/backend":
+      docs: "docs/api"
+
+  # --------------------------------
+  # 13. Custom AI Style Guidelines (Pro / Enterprise)
+  # --------------------------------
+  # Customize the tone and style of
+  # generated documentation.
+  #
+  style:
+    enabled: false
+    tone: "friendly" # options: friendly, formal, technical, casual
+    length: "concise" # options: concise, detailed, balanced
+    guidelines:
+      - "Use a friendly, encouraging tone. Avoid sounding robotic."
+      - "Always refer to the user as 'you', never 'the user'."
+      - "When mentioning API keys, warn them to keep it secret."
+      - "Do not use emojis in headers."
+
+  # --------------------------------
+  # 14. Docs Template (Pro / Enterprise)
+  # --------------------------------
+  # Provide a custom template to guide
+  # the AI in generating documentation.
+
+  # .github/uptodocs.yml
+
+  template:
+    - slug: "team-api"
+      name: "Team API Standard"
+      # Option A: Point to a file in the repo (Recommended)
+      path: ".github/uptodocs/templates/api-standard.md"
+      description: "Our company standard for endpoints"
+      # Option B: Inline content (Good for short snippets)
+    # content: |
+    # Bug: ${TITLE}
+    # **Severity:** High
+    # **Found by:** ${AUTHOR}
+
+  # 15. Custom AI Model (Enterprise)
+  # --------------------------------
+  # Use a custom AI model endpoint for
+  # generating documentation.
+  # custom_model:
+  #   endpoint: "https://api.mycustommodel.com/generate"
+
+  # 16. Notification Settings (Pro / Enterprise)
+  # --------------------------------
+  # Notify specific users or teams when
+  # documentation PRs are created.
+  notifications:
+    enabled: true
+
+  # 17. Default Language (Pro/Enterprise)
+  # --------------------------------
+  # Set the default language for documentation generation.
+  default_language: "en"
+
+  # FUTURE ADDITION # XX. Multi-language Support (Enterprise)
+  # FUTURE ADDITION # --------------------------------
+  # FUTURE ADDITION # Generate documentation in multiple languages.
+  # FUTURE ADDITION # --------------------------------
+  # FUTURE ADDITION # multilingual:
+  # FUTURE ADDITION #   default_language: "en"
+  # FUTURE ADDITION #   enabled: false
+  # FUTURE ADDITION # languages: ["en", "fr", "de"] # Keep max to 3 for best results
+  # FUTURE ADDITION # strategy: "subfolder" # 'subfolder' (docs/fr/...) or 'suffix' (file.fr.md)
+# ================================
+# End of Configuration
+# ================================
+
+
